@@ -44,6 +44,7 @@ INSTALL_DOCKER_CE(){
 
 INSTALL_NVIDIA_DOCKER2(){
 
+# - https://docs.nvidia.com/ngc/ngc-titan-setup-guide/index.html	
 # - https://docs.nvidia.com/deeplearning/frameworks/user-guide/index.html	
 # - https://github.com/NVIDIA/nvidia-docker
 # - https://forums.docker.com/t/unit-docker-service-not-found/75817
@@ -57,19 +58,21 @@ INSTALL_NVIDIA_DOCKER2(){
 	#   
         # try to remove NVIDIA Docker version1 if have NVIDIA Docker version 1
 	#
-        echo "remove NVIDIA Docker version 1"
+        echo "Remove NVIDIA Docker version 1"
         docker volume ls -q -f driver=nvidia-docker | xargs -r -I{} -n1 docker ps -q -a -f volume={} | xargs -r docker rm -f
         sudo apt-get purge nvidia-docker
 	#
-        # install NVIDIA Docker Version2  	
+        # install NVIDIA Container Toolkit 
 	#
-        echo "start installing NVIDIA Docker Version 2"
+        echo "Start to install NVIDIA Docker Version 2"
 	distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
 	curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
 	curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
 	sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
         sudo systemctl restart docker
-
+        #
+	# install NVIDIA Docker2 
+	# 
         sudo apt-get install nvidia-docker2
         sudo pkill -SIGHUP dockerd
    fi 
@@ -118,5 +121,5 @@ NVIDIA_DOCKERS(){
 
 NVIDIA_DOCKERS
 
-echo -e "\e[91m>>> finished installing/chekcing NVIDIA DOCKERS for x86 \e[39m"
+echo -e "\e[91m>>> finished installing/chekcing NVIDIA DOCKERS for x86 \n Could you please reboot your pc !!! \e[39m"
 
